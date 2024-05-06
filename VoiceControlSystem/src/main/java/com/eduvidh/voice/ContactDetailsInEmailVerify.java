@@ -20,19 +20,20 @@ public class ContactDetailsInEmailVerify extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get the form parameters
-        String name = request.getParameter("name");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
-        String city = request.getParameter("city");
+        String subject = request.getParameter("subject");
         String message = request.getParameter("message");
 
-        // Set up the email properties for admin
+        // Set up the email properties for user
         Properties adminProperties = new Properties();
         adminProperties.put("mail.smtp.auth", "true");
         adminProperties.put("mail.smtp.starttls.enable", "true");
         adminProperties.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your SMTP host
         adminProperties.put("mail.smtp.port", "587"); // Replace with your SMTP port
 
-        // Set up the session for admin
+        // Set up the session for user
         Session adminSession = Session.getInstance(adminProperties, new jakarta.mail.Authenticator() {
             protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
                 return new jakarta.mail.PasswordAuthentication(email, "zmpz pzsl fjbu gaou"); // Replace with user email credentials//while html data giving user so user login details here currently user login mail
@@ -45,7 +46,7 @@ public class ContactDetailsInEmailVerify extends HttpServlet {
             adminMessage.setFrom(new InternetAddress(email));
             adminMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("temperraja123@gmail.com")); // Replace with admin email
             adminMessage.setSubject("New Contact Form Submission");
-            adminMessage.setText("Name: " + name + "\nEmail: " + email + "\nCity: " + city + "\nMessage: " + message);
+            adminMessage.setText("FirstName: " + firstName + "\nLastName: " + lastName + "\nEmail: " + email + "\nSubject: " + subject + "\nMessage: " + message);
 
             
          // Print the email message details to console
@@ -59,7 +60,7 @@ public class ContactDetailsInEmailVerify extends HttpServlet {
             Transport.send(adminMessage);
 
             // Send automatic response to user
-            sendAutomaticResponse(email, name);
+            sendAutomaticResponse(email, firstName);
 
             // Redirect to a success page
             RequestDispatcher dis = request.getRequestDispatcher("Sent.html");
@@ -69,7 +70,7 @@ public class ContactDetailsInEmailVerify extends HttpServlet {
         }
     }
 
-    private void sendAutomaticResponse(String email, String name) throws MessagingException, IOException {
+    private void sendAutomaticResponse(String email, String firstName) throws MessagingException, IOException {
         // Set up the email properties for user response
         Properties userResponseProperties = new Properties();
         userResponseProperties.put("mail.smtp.auth", "true");
@@ -89,7 +90,7 @@ public class ContactDetailsInEmailVerify extends HttpServlet {
         userResponseMessage.setFrom(new InternetAddress("temperraja123@gmail.com"));
         userResponseMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
         userResponseMessage.setSubject("Thank you for contacting us");
-        userResponseMessage.setText("Dear " + name + ",\n\nThank you for contacting us. We have received your message and will get back to you as soon as possible.\n\nBest regards,\nThe Admin Team");
+        userResponseMessage.setText("Dear " + firstName + ",\n\nThank you for contacting us. We have received your message and will get back to you as soon as possible.\n\nBest regards,\nThe Admin Team");
         
         // Print the email message details to console
         System.out.println("Sending Automatic Response to User:");

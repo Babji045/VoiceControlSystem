@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login with Voice Command</title>
+    <link rel="stylesheet" href="Login.css">
+</head>
+
+<body>
+    <!---Main container---->
+    <div class="container">
+        <!---Form container-->
+        <div class="form-wrap">
+            <h1>Sign-in Form</h1>
+            <div class="signup-box">
+                <div class="left-box">
+                    <form action="LoginVerify" method="post"><!--i taken this onsubmit="return validateForm()" -->
+                        <input type="text" id="username-input" placeholder="User Name" class="form-control" required name="un">
+                        <input type="password" id="password-input" placeholder="Password" class="form-control" id="password" required name="pass">
+                        <span id="password-strength"></span>
+                        <button type="submit">Sign-in Now</button>
+                        <div>
+                            <h2>Or</h2>
+                            <h3>Login With Voice Command </h3>
+                        </div>
+                        <!-- Voice command button -->
+                    <!--      <div class="voicebg">
+                            <button id="start-btn"><img src="Voice.jpeg" alt="Start" style="width: 150px; height: 50px; margin-left: 4px;
+                                margin-right: 40px;"></button> 
+                        </div>  -->
+                    </form>
+                     <form id="loginForm" action="LoginByVoice" method="post">
+        <label for="voiceInput">Speak Username and Password:</label>
+        <input type="hidden" id="voiceInput" name="voiceInput">
+        <button type="button" onclick="captureAndSubmit()"><img src="Voice.jpeg" alt="Start" style="width: 150px; height: 50px; margin-left: 4px;
+                                margin-right: 40px;"></button>
+    </form>
+                    
+                </div>
+                <div class="right-box">
+                    <img src="Signup1.jpeg" alt="" />
+                </div>
+            </div>
+        </div>
+        <p>
+            By Clicking the Sign-in Button You Agree to Our <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>
+        </p>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+
+        startBtn.addEventListener('click', function () {
+            // Check if SpeechRecognition is available
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+
+                // Start recognition
+                recognition.start();
+
+                // Handle recognition result
+                recognition.onresult = function (event) {
+                    const result = event.results[0][0].transcript.toLowerCase();
+                    console.log('Recognized:', result);
+
+                    // Check if the user said the login command
+                    if (result.includes('login')) {
+                        // Prompt user to speak their username
+                        const username = prompt('Speak your username:');
+                        // Prompt user to speak their password
+                        const password = prompt('Speak your password:');
+
+                        // Simulate backend authentication (replace with your actual authentication process)
+                        if (username === 'example' && password === 'password') {
+                            alert('Login successful!');
+
+                            // Save login data to local storage
+                            localStorage.setItem('username', username);
+                            localStorage.setItem('password', password);
+
+                            // Redirect to dashboard or perform other actions after successful login
+                        } else {
+                            alert('Invalid username or password.');
+                        }
+                    } else {
+                        alert('Command not recognized. Please say "login" to initiate login.');
+                    }
+                };
+            } else {
+                alert('Speech recognition not supported in this browser.');
+            }
+        });
+
+        // Function to validate form
+        function validateForm() {
+            // Get username and password from input fields
+            const username = document.getElementById('username-input').value;
+            const password = document.getElementById('password-input').value;
+
+            // Simulate backend authentication (replace with your actual authentication process)
+            if (username === 'example' && password === 'password') {
+                alert('Login successful!');
+
+                // Save login data to local storage
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+
+                // Redirect to dashboard or perform other actions after successful login
+            } else {
+                alert('Invalid username or password.');
+            }
+
+            return false; // Prevent form submission for this demonstration
+        }
+    </script>
+    
+     <script>
+        // Function to capture voice after a delay and submit it to the servlet
+        function captureAndSubmit() {
+            // Allow 1 second delay before capturing voice input
+            setTimeout(function() {
+                var recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.onresult = function(event) {
+                    var voiceInput = event.results[0][0].transcript;
+                    var voiceInputField = document.getElementById("voiceInput");
+                    voiceInputField.value = voiceInput;
+                    document.getElementById("loginForm").submit();
+                };
+
+                recognition.start();
+            }, 1000); // Delay for 1 second
+        }
+    </script>
+</body>
+
+</html>

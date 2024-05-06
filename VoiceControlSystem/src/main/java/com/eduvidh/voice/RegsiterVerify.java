@@ -34,6 +34,8 @@ public class RegsiterVerify  extends HttpServlet
     	String nam= req.getParameter("name");
     	String em= req.getParameter("email");
     	String password= req.getParameter("pass");
+    	String ConfirmPassword = req.getParameter("confirmPass");
+    	String phone = req.getParameter("mb");
     	Part filePart = req.getPart("fileToUpload");
     	PrintWriter writer  = resp.getWriter();
     	
@@ -41,7 +43,7 @@ public class RegsiterVerify  extends HttpServlet
         if (!isValidUsername(username)) 
         {
             writer.println("<h1 style=color:red>Invalid Username. Please enter a username starting with a capital letter followed by characters and ending with a number.</h1>");
-            RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+            RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
             dis.include(req, resp);
             return; // Exit the method
         }
@@ -49,7 +51,7 @@ public class RegsiterVerify  extends HttpServlet
         if (!isValidPassword(password)) 
         {
             writer.println("<h1 style=color:red>Invalid Password. Please enter a password containing at least one capital letter and one special character (@ or $).and ending with a number</h1>");
-            RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+            RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
             dis.include(req, resp);
             return; // Exit the method
         }
@@ -58,7 +60,7 @@ public class RegsiterVerify  extends HttpServlet
         if (isEmailExists(em)) 
         {
             writer.println("<h1 style=color:red>Email already exists. Please use another email.</h1>");
-            RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+            RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
             dis.include(req, resp);
             return; // Exit the method
         }
@@ -66,7 +68,7 @@ public class RegsiterVerify  extends HttpServlet
         if (isUserExists(username)) 
         {
             writer.println("<h1 style=color:red>UserName already exists. Please use another UserName.</h1>");
-            RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+            RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
             dis.include(req, resp);
             return; // Exit the method
         }
@@ -74,28 +76,28 @@ public class RegsiterVerify  extends HttpServlet
     	
    	 if (username == null || username.trim().isEmpty()) {
         writer.println("<h1 style=color:red>Username is required. Please try again.</h1>");
-        RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+        RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
         dis.include(req, resp);
         return; // Exit the method
     }
         
     	    if (nam == null || nam.trim().isEmpty()) {
     	        writer.println("<h1 style=color:red>Name is required. Please try again.</h1>");
-    	        RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+    	        RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
     	        dis.include(req, resp);
     	        return; // Exit the method
     	    }
     	    
     	    if (em == null || em.trim().isEmpty()) {
     	        writer.println("<h1 style=color:red>Email is required. Please try again.</h1>");
-    	        RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+    	        RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
     	        dis.include(req, resp);
     	        return; // Exit the method
     	    }
     	    
     	    if (password == null || password.trim().isEmpty()) {
     	        writer.println("<h1 style=color:red>Password is required. Please try again.</h1>");
-    	        RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+    	        RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
     	        dis.include(req, resp);
     	        return; // Exit the method
     	    }
@@ -113,7 +115,7 @@ public class RegsiterVerify  extends HttpServlet
     	
     	//Establish the Jdbc Connection
     	String url="jdbc:mysql://localhost:3306?user=root&password=12345";
-    	String query="insert into voice.register (userName, name, email, password, profilephoto) values(?,?,?,?,?)";
+    	String query="insert into voice.register (userName, name, email, password, profilephoto,confirmPasswordl,mobileNo) values(?,?,?,?,?,?,?)";
     	 try 
     	 {
     		 Class.forName("com.mysql.jdbc.Driver");
@@ -125,6 +127,8 @@ public class RegsiterVerify  extends HttpServlet
 			   ps.setString(3, em);
 			   ps.setString(4, password);
 			  // ps.setBlob(5, is);
+			   ps.setString(6, ConfirmPassword);
+			   ps.setString(7, phone);
 			   
 			   if (is != null) 
 			   {
@@ -139,15 +143,15 @@ public class RegsiterVerify  extends HttpServlet
 			 int rec= ps.executeUpdate();
 			 if (rec>0) 
 			 {
-				 writer.println("<h1 style=color:green>Registartion Sucess</h1>");
-			RequestDispatcher dis = req.getRequestDispatcher("RegSucess.html");
+				 writer.println("<h1 style=color:green><center>Registartion Sucess</center></h1>");
+			RequestDispatcher dis = req.getRequestDispatcher("Welcomepage.html");
 			  dis.include(req, resp);
 				System.out.println("Data inserted");
 			}
 			 else
 			 {
-				 writer.println("<h1 style=color:red>Invalid Registartion Details Try Again</h1>");
-				 RequestDispatcher dis = req.getRequestDispatcher("Register.html");
+				 writer.println("<h1 style=color:red><center>Invalid Registartion Details Try Again</center></h1>");
+				 RequestDispatcher dis = req.getRequestDispatcher("Signup.html");
 				  dis.include(req, resp);
 				 System.out.println("Data not inserted"); 
 			 }

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-up Page</title>
+    <link rel="stylesheet" href="Signup.css">
+</head>
+
+<body>
+    <!---Main container---->
+    <div class="container">
+        <!---Form container-->
+        <div class="form-wrap">
+            <h1>Signup Form</h1>
+            <h2>Create an account</h2>
+            <div class="signup-box">
+                <div class="left-box">
+                    <form action="RegsiterVerify" onsubmit="return validateForm()" method="post" enctype="multipart/form-data">
+                        <div class="picture">
+                            <div class="card">
+                                <!-- Label for image upload -->
+                                <label for="input-file">
+                                    <!-- Image preview container -->
+                                    <div id="image-preview">
+                                        <img src="profile.jpeg" id="profile-pic" alt="Profile Picture">
+                                    </div>
+                                    <!-- Text for image upload -->
+                                    <span id="image-upload-text">Upload Image</span>
+                                </label>
+                                <!-- Actual file input element -->
+                                <input type="file" accept="image/jpeg,image/png,image/jpg" id="input-file" onchange="previewImage(event)" name="fileToUpload">
+                            </div>
+                        </div>
+                        <!-- Other form fields -->
+                        <input type="text" id="fullname" placeholder=" Full Name " class="form-control" required name="name">
+                        <input type="text" id="username" placeholder=" User Name " class="form-control" required name="un">
+                        <input type="email" id="email" placeholder=" Email " class="form-control" id="email" required name="email">
+                        <input type="tel" id="mobilenumber" placeholder=" Mobile Number" class="form-control" required name="mb">
+                        <input type="password" id="password" placeholder=" Password " class="form-control" id="password" required name="pass">
+                        <span id="password-strength"></span>
+                        <!-- Confirm password field -->
+                        <input type="password" id="confirmpassword" placeholder=" Confirm Password " class="form-control"
+                            id="confirm-password" required name="confirmPass">
+                        <span id="password-match-error" style="color: red;"></span>
+
+                        <button type="submit">Signup-Now</button>
+                    </form>
+                </div>
+                <div class="right-box">
+                    <img src="Signup1.jpeg" alt="" />
+                </div>
+            </div>
+        </div>
+        <p>
+            By Clicking the Signup Button You Agree to Our <a href="#">Terms and Conditions</a> and <a href="#">Privacy
+                Policy</a>
+        </p>
+    </div>
+    
+
+    <script>
+        // Function to preview the selected image
+        function previewImage(event) {
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function () {
+                var img = document.getElementById('profile-pic');
+                img.src = reader.result;
+                document.getElementById('image-upload-text').style.display = 'none'; // Hide the "Upload Image" text
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // Function to validate form
+        function validateForm() {
+            var fullName = document.getElementById('fullname').value;
+            var userName = document.getElementById('username').value;
+            var email = document.getElementById('email').value;
+            var phoneNumber = document.getElementById('mobilenumber').value;
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirmpassword').value;
+
+            // Email validation
+            if (!email.includes('@')) {
+                alert('Email must contain @ symbol.');
+                return false;
+            }
+            
+            // Password strength validation
+            var passwordStrength = document.getElementById('password-strength');
+            var strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+            if (!strongRegex.test(password)) {
+                passwordStrength.innerText = 'Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character.';
+                passwordStrength.style.color = 'red';
+                return false;
+            } else {
+                passwordStrength.innerText = '';
+            }
+
+            // Password match validation
+            var passwordMatchError = document.getElementById('password-match-error');
+            if (password !== confirmPassword) {
+                passwordMatchError.innerText = 'Passwords do not match.';
+                return false;
+            } else {
+                passwordMatchError.innerText = ''; // Clear the error message if passwords match
+            }
+
+            // Save user data to localStorage
+            var userData = {
+                fullName: fullName,
+                userName: userName,
+                email: email,
+                phoneNumber: phoneNumber,
+                password: password
+            };
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            alert('User data saved successfully.');
+
+            return true;
+        }
+    </script>
+</body>
+
+</html>

@@ -33,6 +33,7 @@ public class LoginByVoice extends HttpServlet {
 
     	
     	 String voiceInput = request.getParameter("voiceInput");
+    	 PrintWriter writer  = response.getWriter();
     	    System.out.println("Voice Input: " + voiceInput);
     	    
     	    try {
@@ -56,12 +57,15 @@ public class LoginByVoice extends HttpServlet {
     	            // Authenticate against the database
     	            if (authenticate(expectedUsername, expectedPassword)) {
     	                // Successful login
-    	                RequestDispatcher dis = request.getRequestDispatcher("Welcome.html");
+    	            	writer.println("<h1 style=color:green><center>Login Sucess</center></h1>");
+    					 //  writer.println("<h1 style=color:green><center>Welcome "+rs.getString("name")+"</center></h1>");
+    	                RequestDispatcher dis = request.getRequestDispatcher("Welcomepage.html");
     	                dis.include(request, response);
     	                return;
     	            } else {
     	                // Failed login
-    	                RequestDispatcher dis = request.getRequestDispatcher("Loginerror.html");
+    	            	writer.println("<h1 style=color:red><center>Invalid Login</center></h1>");
+    	                RequestDispatcher dis = request.getRequestDispatcher("LoginFront.html");
     	                dis.include(request, response);
     	                return;
     	            }
@@ -76,14 +80,68 @@ public class LoginByVoice extends HttpServlet {
     	    }
     	}
 
-    	private String mapUsername(String spokenUsername) {
+    	private String mapUsername(String spokenUsername) 
+    	{
     	    // Map spoken username "Pawan 1" to expected username "Pavan1"
-    	    return spokenUsername.replace("Pawan", "Pavan").replace(" 1", "1");
+//    	    return spokenUsername.replace("Pawan", "Pavan").replace(" 1", "1");
+    		if (spokenUsername.contains("Pawan 1")) 
+    		{
+    	        return spokenUsername.replace("Pawan", "Pavan").replace(" 1", "1");
+    	    } 
+    		else if (spokenUsername.contains("Babji 5")) 
+    	    {
+    	        return spokenUsername.replace("Babji", "Babji").replace(" 5", "5");
+    	    } 
+    	    else if (spokenUsername.contains("Chandhu 2")) 
+    	    {
+    	        return spokenUsername.replace("Chandhu", "Chandhu").replace(" 2", "2");
+    	    }
+    	    else if (spokenUsername.contains("Chandu 55")) 
+    	    {
+    	        return spokenUsername.replace("Chandu", "Chandhu").replace(" 55", "55");
+    	    }
+    	    else if (spokenUsername.contains("Siva")) {
+    	        return spokenUsername.replace("siva", "siva");
+    	    } 
+    	    else if (spokenUsername.contains("chandhu")) {
+    	        return spokenUsername.replace("chandhu", "chandhu");
+    	    }
+    	    else if (spokenUsername.contains("krishna55")) {
+    	        return spokenUsername.replace("krishna55", "krishna55");
+    	    } 
+    	    else 
+    	    {
+    	        // If no specific username is matched, return the original username
+    	        return spokenUsername;
+    	    }
+    		
+    		
     	}
 
-    	private String mapPassword(String spokenPassword) {
+    	private String mapPassword(String spokenPassword)
+    	{
     	    // Map spoken password "Pawan at the rate 1" to expected password "Pavan@1"
-    	    return spokenPassword.replace("Pawan", "Pavan").replace(" at the rate 1", "@1");
+    	  //  return spokenPassword.replace("Pawan", "Pavan").replace(" at the rate 1", "@1");
+    	    if (spokenPassword.contains("Pawan at the rate 1")) 
+    		{
+    	        return spokenPassword.replace("Pawan", "Pavan").replace(" at the rate 1", "@1");
+    	    }
+    	    else if (spokenPassword.contains("Babji at the rate 05"))
+    	    {
+    	    	 return spokenPassword.replace("Babji", "Babji").replace(" at the rate 05", "@05");
+			}
+    	    else if (spokenPassword.contains("Chandhu at the rate 02"))
+    	    {
+    	    	 return spokenPassword.replace("Chandhu", "Chandhu").replace(" at the rate 02", "@02");
+			}
+    	    else if (spokenPassword.contains("Chandu at the rate 55"))
+    	    {
+    	    	 return spokenPassword.replace("Chandu", "Chandhu").replace(" at the rate 55", "@55");
+			}
+    	    else
+    	    {
+    	    	return spokenPassword;
+    	    }
     	}
 
     	

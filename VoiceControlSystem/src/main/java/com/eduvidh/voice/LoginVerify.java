@@ -43,7 +43,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 				 {
 				   writer.println("<h1 style=color:green><center>Login Sucess</center></h1>");
 				   writer.println("<h1 style=color:green><center>Welcome "+rs.getString("name")+"</center></h1>");
-				     RequestDispatcher dis = req.getRequestDispatcher("Welcome.html");
+				     RequestDispatcher dis = req.getRequestDispatcher("Welcomepage.html");
 				    dis.include(req, resp);
 					System.out.println("Login Sucess");
 				}
