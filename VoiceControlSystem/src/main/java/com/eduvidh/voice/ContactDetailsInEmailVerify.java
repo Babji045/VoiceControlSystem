@@ -8,12 +8,12 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.RequestDispatcher;
 
 @WebServlet("/ContactDetailsInEmailVerify")
 public class ContactDetailsInEmailVerify extends HttpServlet {
@@ -26,25 +26,25 @@ public class ContactDetailsInEmailVerify extends HttpServlet {
         String subject = request.getParameter("subject");
         String message = request.getParameter("message");
 
-        // Set up the email properties for user
+        // Set up the email properties for admin
         Properties adminProperties = new Properties();
         adminProperties.put("mail.smtp.auth", "true");
         adminProperties.put("mail.smtp.starttls.enable", "true");
         adminProperties.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your SMTP host
         adminProperties.put("mail.smtp.port", "587"); // Replace with your SMTP port
 
-        // Set up the session for user
+        // Set up the session for admin
         Session adminSession = Session.getInstance(adminProperties, new jakarta.mail.Authenticator() {
             protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
-                return new jakarta.mail.PasswordAuthentication(email, "zmpz pzsl fjbu gaou"); // Replace with user email credentials//while html data giving user so user login details here currently user login mail
+                return new jakarta.mail.PasswordAuthentication("temperraja123@gmail.com", "euyr gubl gsio vpmv"); // Replace with user email credentials//while html data giving user so user login details here currently user login mail
             }
         });
 
         try {
             // Create a default MimeMessage object for admin
             MimeMessage adminMessage = new MimeMessage(adminSession);
-            adminMessage.setFrom(new InternetAddress(email));
-            adminMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("temperraja123@gmail.com")); // Replace with admin email
+            adminMessage.setFrom(new InternetAddress("temperraja123@gmail.com"));
+            adminMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email)); // Replace with admin email
             adminMessage.setSubject("New Contact Form Submission");
             adminMessage.setText("FirstName: " + firstName + "\nLastName: " + lastName + "\nEmail: " + email + "\nSubject: " + subject + "\nMessage: " + message);
 
@@ -81,7 +81,7 @@ public class ContactDetailsInEmailVerify extends HttpServlet {
         // Set up the session for user response
         Session userResponseSession = Session.getInstance(userResponseProperties, new jakarta.mail.Authenticator() {
             protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
-                return new jakarta.mail.PasswordAuthentication("temperraja123@gmail.com", "bpuf aumt dsds rsgx"); // Replace with admin email credentials // why means admin giving reply
+                return new jakarta.mail.PasswordAuthentication("temperraja123@gmail.com", "euyr gubl gsio vpmv"); // Replace with admin email credentials // why means admin giving reply
             }
         });
 

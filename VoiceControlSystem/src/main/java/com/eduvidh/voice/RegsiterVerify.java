@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.security.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -39,6 +41,8 @@ public class RegsiterVerify  extends HttpServlet
     	Part filePart = req.getPart("fileToUpload");
     	PrintWriter writer  = resp.getWriter();
     	
+    	 // Hash the password
+        String hashedPassword = hashPassword(password);
     	// Validate username
         if (!isValidUsername(username)) 
         {
@@ -111,7 +115,9 @@ public class RegsiterVerify  extends HttpServlet
 //            }  
     	    
     	    
-    	
+    	   
+    	    
+    	    
     	
     	//Establish the Jdbc Connection
     	String url="jdbc:mysql://localhost:3306?user=root&password=12345";
@@ -125,7 +131,7 @@ public class RegsiterVerify  extends HttpServlet
 			   ps.setString(1, username);
 			   ps.setString(2, nam);
 			   ps.setString(3, em);
-			   ps.setString(4, password);
+			   ps.setString(4, hashedPassword);
 			  // ps.setBlob(5, is);
 			   ps.setString(6, ConfirmPassword);
 			   ps.setString(7, phone);
@@ -165,6 +171,29 @@ public class RegsiterVerify  extends HttpServlet
 		}
     	 
     } 
+     
+     public String hashPassword(String password) {
+//	        try {
+//	            // Choose a strong hashing algorithm (e.g., SHA-256)
+//	            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+//	            byte[] hashBytes = digest.digest(password.getBytes());
+//	            
+//	            // Convert the byte array to a hexadecimal string
+//	            StringBuilder sb = new StringBuilder();
+//	            for (byte b : hashBytes) {
+//	                sb.append(String.format("%02x", b));
+//	            }
+//	            return sb.toString();
+//	        } catch (NoSuchAlgorithmException e) {
+//	            // Handle exception
+//	            e.printStackTrace();
+//	            return null;
+//	        }
+    	  int costFactor = 10; // default is 10, lower value results in shorter hash
+          return BCrypt.hashpw(password, BCrypt.gensalt(costFactor));
+	    }
+	    
+     
      
   // Method to validate username
      private boolean isValidUsername(String username) {
