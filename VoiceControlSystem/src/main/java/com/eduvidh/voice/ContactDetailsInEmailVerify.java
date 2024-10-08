@@ -36,7 +36,7 @@ public class ContactDetailsInEmailVerify extends HttpServlet {
         // Set up the session for admin
         Session adminSession = Session.getInstance(adminProperties, new jakarta.mail.Authenticator() {
             protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
-                return new jakarta.mail.PasswordAuthentication("temperraja123@gmail.com", "euyr gubl gsio vpmv"); // Replace with user email credentials//while html data giving user so user login details here currently user login mail
+                return new jakarta.mail.PasswordAuthentication("temperraja123@gmail.com", "euyr gubl gsio vpmv"); // Replace with admin email credentials//while html data giving user so user login details here currently user login mail
             }
         });
 
